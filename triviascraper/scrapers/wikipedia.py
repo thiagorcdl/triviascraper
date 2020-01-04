@@ -1,22 +1,23 @@
-import re
-
-from scrapers.base import BaseScraper
+from triviascraper.scrapers.base import BaseScraper
 import wikipedia
 
-from utils import get_first_sentence, get_stripped_answer, get_stripped_question
+from triviascraper.utils import (
+    get_first_sentence, get_stripped_answer,
+    get_stripped_question
+)
 
 
 class WikipediaScraper(BaseScraper):
     titles = []
 
-    def __init__(self, n_questions, lang):
-        super(WikipediaScraper, self).__init__(n_questions, lang)
+    def __init__(self, n_trivias, lang):
+        super(WikipediaScraper, self).__init__(n_trivias, lang)
         wikipedia.set_lang(lang)
         self.titles = self.get_random_titles()
 
     def get_random_titles(self):
         """Return a list of random Wikipedia titles."""
-        return wikipedia.random(pages=self.n_questions)
+        return wikipedia.random(pages=self.n_trivias)
 
     def get_random_title(self):
         """Return next random Wikipedia title."""
@@ -47,7 +48,3 @@ class WikipediaScraper(BaseScraper):
                 'question': question,
                 'locale': self.lang,
             }
-
-    def write_question(self, question_data):
-        """Parse through article text and extract question components."""
-        print(question_data)  # TODO: remove override

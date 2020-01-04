@@ -23,5 +23,5 @@ def get_stripped_question(title, new_str, sentence):
 
 
 def get_stripped_answer(title):
-    """Remove parenthesis and any content inside from answers/titles."""
+    """Remove parenthesis and any content within from answers/titles."""
     return re.sub(PARENTHESIS_RE, EMPTY_STR, title).strip()

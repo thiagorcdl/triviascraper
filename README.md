@@ -5,6 +5,7 @@ Scrape the web for some trivia questions and answers.
 
 * Currently only supports Wikipedia.
 * Still early days of development.
+* Currently just saves to CSV.
 
 # Version
-0.1.1
+0.2.0

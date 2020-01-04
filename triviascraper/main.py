@@ -1,16 +1,8 @@
 """
 Main script to be run
 """
-from scrapers.wikipedia import WikipediaScraper
-
-
-def parse_params():
-    """Change behavior based on passed options.
-
-    TODO
-    """
-    return
-
+from triviascraper.io import parse_params
+from triviascraper.scrapers.wikipedia import WikipediaScraper
 
 if __name__ == "__main__":
     # Run main logic
