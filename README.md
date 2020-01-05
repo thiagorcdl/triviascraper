@@ -8,4 +8,4 @@ Scrape the web for some trivia questions and answers.
 * Currently just saves to CSV.
 
 # Version
-0.2.0
+0.3.0
