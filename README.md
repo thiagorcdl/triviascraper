@@ -15,4 +15,4 @@ Scrape the web for some trivia questions and answers.
 * Use SQLAlchemy and parse through previously fetched data, to avoid duplicates.
 
 # Version
-0.3.0
+0.3.1

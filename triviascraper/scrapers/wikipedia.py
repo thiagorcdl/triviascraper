@@ -40,9 +40,15 @@ class WikipediaScraper(BaseScraper):
     def parse_article(self, article):
         """Get first sentence of the summary and remvoe answer from it."""
         first_sentence = get_first_sentence(article.summary)
-        question = get_stripped_question(
-            article.title, self.BLANK, first_sentence.group()
-        )
+        try:
+            question = get_stripped_question(
+                article.title, self.BLANK, first_sentence.group()
+            )
+        except AttributeError as err:
+            # first_sentence is None
+            question = get_stripped_question(
+                article.title, self.BLANK, article.summary
+            )
         return {
             'answer': get_stripped_answer(article.title),
             'question': question,
