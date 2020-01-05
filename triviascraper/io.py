@@ -16,8 +16,7 @@ def parse_params():
     return
 
 
-def write_to_file(row_content,
-                  filename=TMP_FILE):  # TODO: hook in filename from arguments
+def write_to_file(row_content, filename=TMP_FILE):
     """Save iterable to CSV.
 
     TODO: allow exporting to other formats.

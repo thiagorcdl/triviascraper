@@ -46,11 +46,15 @@ class BaseScraper:
         for article in self.fetch_articles():
             if not article:
                 continue
-            trivia = self.create_trivia_object(article)
-            if write:
-                self.write_trivia(trivia)
+            try:
+                trivia = self.create_trivia_object(article)
+            except ValueError:
+                continue
             else:
-                print(trivia)
+                if write:
+                    self.write_trivia(trivia)
+                else:
+                    print(trivia)
 
     def run(self):
         """Run main logic (get and write trivias)."""

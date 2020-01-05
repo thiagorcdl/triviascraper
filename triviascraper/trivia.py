@@ -1,20 +1,21 @@
-from triviascraper.io import DELIMITER, QUOTECHAR
-
-
 class Trivia:
     """Basic definition of a trivia question.
 
     TODO: use SQLAlchemy.
     """
-    question = None
+    question = None  # required
     category = None
-    answer = None
+    answer = None  # required
     wrong_choices = None
     locale = None
 
     def __init__(
         self, question="", answer="", locale="", wrong_choices=None, category=""
     ):
+        if not answer:
+            raise ValueError("Missing answer for trivia")
+        if not question:
+            raise ValueError("Missing question for trivia")
         self.question = question
         self.category = category
         self.answer = answer

@@ -1,12 +1,12 @@
 import re
 
-PARENTHESIS_RE = r'(\(.+\))'
+PARENTHESIS_RE = r'\([^\)]*\)*'
 EMPTY_STR = ""
 
 
 def get_first_sentence(string):
     """Match only the first sentence of a string."""
-    return re.search(r'^((.(?![.?!:]+($|\n| [A-Z])))+.)([.?!:]+)', string)
+    return re.search(r'^((.(?![.?!]+($|\n| [A-Z])))+.)([.?!]+)', string)
 
 
 def get_stripped_question(title, new_str, sentence):
@@ -18,8 +18,11 @@ def get_stripped_question(title, new_str, sentence):
         sentence,
         flags=re.I
     )
-    question = re.sub(PARENTHESIS_RE, EMPTY_STR, question)
-    return question.strip().strip(new_str).strip()
+    # Remove parenthesis and ponctuation
+    question = re.sub(PARENTHESIS_RE, EMPTY_STR, question).strip(",:.?").strip()
+    if question:
+        question = question[0].title() + question[1:]
+    return question
 
 
 def get_stripped_answer(title):
