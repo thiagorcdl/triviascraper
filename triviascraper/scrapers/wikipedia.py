@@ -38,19 +38,19 @@ class WikipediaScraper(BaseScraper):
         return self.get_random_title()
 
     def parse_article(self, article):
-        """Get first sentence of the summary and remvoe answer from it."""
+        """Get first sentence of the summary and remove answer from it."""
         first_sentence = get_first_sentence(article.summary)
         try:
             question = get_stripped_question(
-                article.title, self.BLANK, first_sentence.group()
+                article.title, first_sentence.group(), self.locale
             )
-        except AttributeError as err:
+        except AttributeError:
             # first_sentence is None
             question = get_stripped_question(
-                article.title, self.BLANK, article.summary
+                article.title, article.summary, self.locale
             )
         return {
             'answer': get_stripped_answer(article.title),
             'question': question,
-            'locale': self.lang,
+            'locale': self.locale,
         }

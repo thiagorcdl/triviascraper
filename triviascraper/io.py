@@ -3,9 +3,7 @@ Helper functions for input and output.
 """
 import csv
 
-TMP_FILE = "/tmp/trivia.csv"
-DELIMITER = " "
-QUOTECHAR = "\""
+from triviascraper.constants import DELIMITER, TMP_FILE
 
 
 def parse_params():

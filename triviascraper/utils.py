@@ -1,7 +1,7 @@
 import re
 
-PARENTHESIS_RE = r'\([^\)]*\)*'
-EMPTY_STR = ""
+from triviascraper.constants import BLANK, EMPTY_STR, MATH_FORMAT_RE, PARENTHESIS_RE
+from triviascraper.locale import get_locale_class
 
 
 def get_first_sentence(string):
@@ -14,7 +14,7 @@ def capitalize_first_letter(string):
     return string[0].upper() + string[1:] if string else string
 
 
-def get_stripped_question(title, new_str, sentence):
+def get_stripped_question(title, sentence, locale=None):
     """Remove expected answer from the question, whitespaces and blanks from edges."""
     answer = get_stripped_answer(title)
     # Remove answer from beginning or end of summary.
@@ -27,12 +27,26 @@ def get_stripped_question(title, new_str, sentence):
     # Replace remaining occurrences with "blank".
     question = re.sub(
         f'{answer}|{title}',
-        new_str,
+        BLANK,
         question,
         flags=re.I
     )
+    # Remove blank with preceding article from beginning of summary.
+    if locale_class := get_locale_class(locale):
+        article_blank_regex = locale_class.get_article_blank_regex()
+        question = re.sub(
+            article_blank_regex,
+            EMPTY_STR,
+            question,
+            flags=re.I
+        )
+    # Remove formatting
+    question = re.sub(r"\n|\t|\r", EMPTY_STR, question)
+    question = re.sub(r"\s+", " ", question)
+    question = re.sub(MATH_FORMAT_RE, EMPTY_STR, question)
     # Remove parenthesis and ponctuation
     question = re.sub(PARENTHESIS_RE, EMPTY_STR, question).strip(",:.? ")
+
     return capitalize_first_letter(question)
 
 

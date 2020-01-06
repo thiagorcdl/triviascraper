@@ -1,3 +1,6 @@
+from triviascraper.locale import get_locale_class
+
+
 class Trivia:
     """Basic definition of a trivia question.
 
@@ -20,7 +23,15 @@ class Trivia:
         self.category = category
         self.answer = answer
         self.wrong_choices = wrong_choices or []
+        if locale_class := get_locale_class(locale):
+            try:
+                locale = locale_class.get_specific_locale(question, default=locale)
+            except Exception as err:
+                print(err)
         self.locale = locale
+
+    def __repr__(self):
+        return f"<Trivia question=\"{self.question}\" answer=\"{self.answer}\">"
 
     def strip_answer(self):
         return

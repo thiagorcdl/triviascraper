@@ -5,14 +5,13 @@ from triviascraper.trivia import Trivia
 
 
 class BaseScraper:
-    BLANK = '____'
     URL = ""
     n_trivias = 0
-    lang = "en"
+    locale = "en"
 
-    def __init__(self, n_trivias, lang):
+    def __init__(self, n_trivias, locale):
         self.n_trivias = n_trivias
-        self.lang = lang
+        self.locale = locale
 
     def fetch_article(self, *args, **kwargs):
         """Fetch a single article from the base URL."""
