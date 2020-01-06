@@ -16,8 +16,18 @@ class WikipediaScraper(BaseScraper):
         self.titles = self.get_random_titles()
 
     def get_random_titles(self):
-        """Return a list of random Wikipedia titles."""
-        return wikipedia.random(pages=self.n_trivias)
+        """Return a list of random Wikipedia titles.
+
+        Wikipedia random page API fetches at most 500 titles.
+        We use sets to prevent duplicates when sending requests repeatedly.
+        """
+        titles = set()
+        amount = 0
+        while amount < self.n_trivias:
+            missing = self.n_trivias - amount
+            titles = titles.union(set(wikipedia.random(pages=missing)))
+            amount = len(titles)
+        return titles
 
     def get_random_title(self):
         """Return next random Wikipedia title."""

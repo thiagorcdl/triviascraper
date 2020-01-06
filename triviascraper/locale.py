@@ -41,7 +41,6 @@ class PortugueseLocale(BaseLocale):
     codes = (PORTUGUESE, PORTUGAL, BRAZIL)
     articles = ("a", "o", "as", "os", "um", "uma")
 
-    # TODO: use this
     specific_mapping = {
         PORTUGAL: [
             "Portugal", "Lisboa", "lusitan", "telemóvel", "autocarro", "montra",
@@ -60,12 +59,16 @@ class EnglishLocale(BaseLocale):
     articles = ("a", "an", "the")
 
 
-LOCALE_MAPPING = {
-    'pt': PortugueseLocale,
-    'en': EnglishLocale,
-}
+LOCALES = [
+    PortugueseLocale,
+    EnglishLocale,
+]
+LOCALE_MAPPING = {}
+for locale_class in LOCALES:
+    for code in locale_class.codes:
+        LOCALE_MAPPING[code] = locale_class
 
 
 def get_locale_class(locale_code, default=None):
-    """Fetch locale based onthe prefix."""
+    """Fetch locale based on the prefix."""
     return LOCALE_MAPPING.get(locale_code[:2], default)
