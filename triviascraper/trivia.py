@@ -1,3 +1,5 @@
+import re
+
 from triviascraper.locale import get_locale_class
 
 
@@ -6,53 +8,71 @@ class Trivia:
 
     TODO: use SQLAlchemy.
     """
+
     question = None  # required
-    category = None
     answer = None  # required
     wrong_choices = None
     locale = None
+    category = None
 
     def __init__(
-        self, question="", answer="", locale="", wrong_choices=None, category=""
+        self,
+        question="",
+        answer="",
+        locale="",
+        wrong_choices=None,
+        categories=None,
     ):
         if not answer:
             raise ValueError("Missing answer for trivia")
         if not question:
             raise ValueError("Missing question for trivia")
         self.question = question
-        self.category = category
         self.answer = answer
         self.wrong_choices = wrong_choices or []
+
         if locale_class := get_locale_class(locale):
-            try:
-                locale = locale_class.get_specific_locale(question, default=locale)
-            except Exception as err:
-                print(err)
+            self.category = self.get_mapped_category(categories, locale_class)
+            locale = locale_class.get_specific_locale(question, default=locale)
+
         self.locale = locale
 
     def __repr__(self):
-        return f"<Trivia question=\"{self.question}\" answer=\"{self.answer}\">"
+        return f'<Trivia question="{self.question}" answer="{self.answer}">'
 
-    def strip_answer(self):
-        return
+    def get_mapped_category(self, categories, locale_class):
+        """Normalize category based on options."""
+        for category in categories or []:
+            for mapped, terms in locale_class.category_mapping.items():
+                if any(
+                    [re.search(term, category, flags=re.I,) for term in terms]
+                ):
+                    return mapped
+        return ""
 
-    def strip_question(self):
-        return
+    def serialize_list(self, items):
+        """Serialize list into a comma-separated string.
+
+        Result is as follows: "item1,item2,item3"
+        """
+        return ",".join(items)
+
+    @property
+    def serialized_categories(self):
+        """Serialize list of choices into a string."""
+        return self.serialize_list(self.categories)
 
     @property
     def serialized_wrong_choices(self):
-        """Serialize list of choices into a string.
-
-        Result is as follows: "choice1,choice2,choice3"
-        """
-        return ",".join(self.wrong_choices)
+        """Serialize list of choices into a string."""
+        return self.serialize_list(self.wrong_choices)
 
     def to_csv(self):
         """Serialize attributes into CSV columns."""
         return (
             self.question,
-            self.category,
+            self.serialized_categories,
             self.answer,
             self.serialized_wrong_choices,
-            self.locale
+            self.locale,
         )

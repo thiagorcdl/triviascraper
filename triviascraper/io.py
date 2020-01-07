@@ -21,8 +21,6 @@ def write_to_file(row_content, filename=TMP_FILE):
     """
     with open(filename, mode="a") as output_file:
         writer = csv.writer(
-            output_file,
-            delimiter=DELIMITER,
-            quoting=csv.QUOTE_ALL
+            output_file, delimiter=DELIMITER, quoting=csv.QUOTE_ALL
         )
         writer.writerow(row_content)

@@ -1,9 +1,12 @@
+from triviascraper.locale import get_locale_class
 from triviascraper.scrapers.base import BaseScraper
 import wikipedia
 
 from triviascraper.utils import (
-    get_first_sentence, get_stripped_answer,
-    get_stripped_question
+    get_first_sentence,
+    get_stripped_answer,
+    get_stripped_question,
+    get_stripped_prefix,
 )
 
 
@@ -50,17 +53,23 @@ class WikipediaScraper(BaseScraper):
     def parse_article(self, article):
         """Get first sentence of the summary and remove answer from it."""
         first_sentence = get_first_sentence(article.summary)
+        locale_class = get_locale_class(self.locale)
         try:
             question = get_stripped_question(
-                article.title, first_sentence.group(), self.locale
+                article.title, first_sentence.group(), locale_class
             )
         except AttributeError:
             # first_sentence is None
             question = get_stripped_question(
-                article.title, article.summary, self.locale
+                article.title, article.summary, locale_class
             )
         return {
-            'answer': get_stripped_answer(article.title),
-            'question': question,
-            'locale': self.locale,
+            "question": question,
+            "answer": get_stripped_answer(article.title),
+            "categories": [
+                get_stripped_prefix(cat, locale_class.strip_category_prefix)
+                for cat in article.categories
+                if not cat.startswith(locale_class.block_category_prefix)
+            ],
+            "locale": self.locale,
         }

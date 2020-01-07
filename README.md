@@ -4,14 +4,12 @@ Scrape the web for some trivia questions and answers.
 # Notes
 
 * Currently only supports Wikipedia.
-* Still early days of development.
-* Currently just saves to CSV.
+* Currently just saves to CSV in `/tmp/trivia.csv`.
 
 # TODO
 
 * Add tests
-* Include categories from Wikipedia, stripping the prefix
 * Use SQLAlchemy and parse through previously fetched data, to avoid duplicates.
 
 # Version
-0.4.1
+0.5.0
