@@ -6,7 +6,6 @@ from triviascraper.constants import (
     MATH_FORMAT_RE,
     PARENTHESIS_RE,
 )
-from triviascraper.locale import get_locale_class
 
 
 def get_first_sentence(string):

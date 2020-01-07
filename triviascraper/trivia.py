@@ -1,5 +1,6 @@
 import re
 
+from triviascraper.constants import EMPTY_STR
 from triviascraper.locale import get_locale_class
 
 
@@ -45,10 +46,10 @@ class Trivia:
         for category in categories or []:
             for mapped, terms in locale_class.category_mapping.items():
                 if any(
-                    [re.search(term, category, flags=re.I,) for term in terms]
+                    [re.search(term, category, flags=re.I) for term in terms]
                 ):
                     return mapped
-        return ""
+        return EMPTY_STR
 
     def serialize_list(self, items):
         """Serialize list into a comma-separated string.
@@ -56,11 +57,6 @@ class Trivia:
         Result is as follows: "item1,item2,item3"
         """
         return ",".join(items)
-
-    @property
-    def serialized_categories(self):
-        """Serialize list of choices into a string."""
-        return self.serialize_list(self.categories)
 
     @property
     def serialized_wrong_choices(self):
@@ -71,7 +67,7 @@ class Trivia:
         """Serialize attributes into CSV columns."""
         return (
             self.question,
-            self.serialized_categories,
+            self.category,
             self.answer,
             self.serialized_wrong_choices,
             self.locale,
