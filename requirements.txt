@@ -12,5 +12,5 @@ requests==2.22.0
 soupsieve==1.9.5
 toml==0.10.0
 typed-ast==1.4.0
-urllib3==1.25.7
+urllib3==1.25.8
 wikipedia==1.4.0
